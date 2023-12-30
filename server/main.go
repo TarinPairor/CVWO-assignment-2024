@@ -2,9 +2,9 @@ package main
 
 import (
 	//"fmt"
-	"net/http"
 
-	initializers "github.com/TarinPairor/CVWO-assignment-2024/init"
+	"github.com/TarinPairor/CVWO-assignment-2024/controllers"
+	initializers "github.com/TarinPairor/CVWO-assignment-2024/initializers"
 	"github.com/gin-gonic/gin"
 )
 
@@ -25,11 +25,7 @@ func init() {
 // PORT = 3000 declared in .env
 func main() {
 	r := gin.Default()
-	r.GET("/", func(c *gin.Context) {
-	  c.JSON(http.StatusOK, gin.H{
-		"message": "pong",
-	  })
-	})
+	r.POST("/posts", controllers.PostsCreate)
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
   }
 
