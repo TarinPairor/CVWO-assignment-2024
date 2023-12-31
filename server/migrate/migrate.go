@@ -1,27 +1,25 @@
 package main
 
 import (
-	"log"
+	"fmt"
 
 	initializers "github.com/TarinPairor/CVWO-assignment-2024/initializers"
 	"github.com/TarinPairor/CVWO-assignment-2024/models"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
+var db *gorm.DB
+
 func init() {
 	initializers.LoadEnvVariables()
-	initializers.ConnectToDB()
+	db = initializers.ConnectToDB() // assignment, not :=
 }
 
 func main() {
 	// Ensure DB is not nil before using it
-
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-		print(db)
+	if db == nil {
+		fmt.Println("DB is nil. Connection to the database failed.")
+		return
 	}
 	// Use the Create method of the Gorm DB instance to insert the new record
 	db.AutoMigrate(&models.Post{})

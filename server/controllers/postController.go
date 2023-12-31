@@ -3,14 +3,20 @@ package controllers
 import (
 	//"net/http"
 
-	"log"
 	"net/http"
 
+	"github.com/TarinPairor/CVWO-assignment-2024/initializers"
 	"github.com/TarinPairor/CVWO-assignment-2024/models"
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+var db *gorm.DB
+
+func init() {
+	// Initialize the database connection when the package is initialized
+	db = initializers.ConnectToDB()
+}
 
 
 
@@ -24,12 +30,6 @@ func PostsCreate(c *gin.Context) {
 	c.Bind(&body)
 
 	// Initalize db
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-	}
-
 	// Can post json files in /post 
 	post := models.Post{Title: body.Title, Body: body.Body}
 
@@ -48,12 +48,6 @@ func PostsCreate(c *gin.Context) {
 
   func PostsIndex(c *gin.Context) {
 
-	// Initalize db
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-	}
 
 	var posts []models.Post
 	result := db.Find(&posts)
@@ -74,13 +68,6 @@ func PostsCreate(c *gin.Context) {
 	// retrieve id from context.Param of type id
 	id := c.Param("id")
 
-	// Initalize db
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-	}
-
 	var post models.Post
 	result := db.First(&post, id)
 
@@ -96,13 +83,6 @@ func PostsCreate(c *gin.Context) {
   }
 
   func PostsUpdate(c * gin.Context) {
-
-	// Initalize db
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-	}
 
 	//Get id off url
 	id := c.Param("id")
@@ -132,13 +112,6 @@ func PostsCreate(c *gin.Context) {
   }
 
   func PostsDelete(c *gin.Context) {
-
-	// Initalize db
-	dns := "host=tuffi.db.elephantsql.com user=yaudahpd password=o8BXH9DwavcVLgvGJoKVHi4iMQg4KrUc dbname=yaudahpd port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-  	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{})
-	if err != nil {
-		log.Fatal("Failed to connect to database")
-	}
 
 	//Get id off url
 	id := c.Param("id")
