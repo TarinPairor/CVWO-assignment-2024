@@ -5,6 +5,7 @@ import (
 
 	"github.com/TarinPairor/CVWO-assignment-2024/controllers"
 	initializers "github.com/TarinPairor/CVWO-assignment-2024/initializers"
+	"github.com/TarinPairor/CVWO-assignment-2024/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,7 +30,9 @@ func main() {
 
 	//Users
 	r.POST("/signup", controllers.Signup)
-	
+	r.POST("/login", controllers.Login)
+	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+
 	//Posts
 	r.POST("/posts", controllers.PostsCreate)
 	r.PUT("/posts/:id", controllers.PostsUpdate)
