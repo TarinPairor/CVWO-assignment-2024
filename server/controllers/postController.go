@@ -8,16 +8,11 @@ import (
 	"github.com/TarinPairor/CVWO-assignment-2024/initializers"
 	"github.com/TarinPairor/CVWO-assignment-2024/models"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-var db *gorm.DB
-
 func init() {
-	// Initialize the database connection when the package is initialized
 	db = initializers.ConnectToDB()
 }
-
 
 
 func PostsCreate(c *gin.Context) {

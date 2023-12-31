@@ -21,7 +21,8 @@ func main() {
 		fmt.Println("DB is nil. Connection to the database failed.")
 		return
 	}
-	// Use the Create method of the Gorm DB instance to insert the new record
-	db.AutoMigrate(&models.Post{})
+	// Use the Create method of the Gorm DB instance to insert the new record/table
+	//db.AutoMigrate(&models.Post{})
+	db.AutoMigrate(&models.User{})
 
 }
