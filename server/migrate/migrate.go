@@ -23,6 +23,7 @@ func main() {
 	}
 	// Use the Create method of the Gorm DB instance to insert the new record/table
 	//db.AutoMigrate(&models.Post{})
-	db.AutoMigrate(&models.User{})
+	//db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.SimpleUser{})
 
 }
