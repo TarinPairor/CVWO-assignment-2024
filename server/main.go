@@ -6,6 +6,7 @@ import (
 	"github.com/TarinPairor/CVWO-assignment-2024/controllers"
 	initializers "github.com/TarinPairor/CVWO-assignment-2024/initializers"
 	"github.com/TarinPairor/CVWO-assignment-2024/middleware"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -30,9 +31,14 @@ func main() {
 	r := gin.Default()
 
 	// Use cors middleware
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:5173"}  // Add your frontend URL here
-	r.Use(cors.New(config))
+	//config := cors.DefaultConfig()
+	//config.AllowOrigins = []string{"http://localhost:5173"}  
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:5173"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+		AllowCredentials: true,
+	}))
 
 	r.Use(func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "http://localhost:5173")
@@ -43,14 +49,17 @@ func main() {
 	})
 
 	//SimpleUsers
-	r.POST("/simplesignup", controllers.SimpleSignup)
-	r.POST("/simplelogin", controllers.SimpleLogin)
-	r.GET("/simplevalidate", controllers.SimpleValidate)
+	//r.POST("/simplesignup", controllers.SimpleSignup)
+	//r.POST("/simplelogin", controllers.SimpleLogin)
+	//r.GET("/simplevalidate", middleware.RequireSimpleAuth, controllers.SimpleValidate)
 
 	//Users
 	r.POST("/signup", controllers.Signup)
+	r.GET("/getallusers", controllers.GetAllUsers)
 	r.POST("/login", controllers.Login)
+	r.GET("/login", controllers.Login)
 	r.GET("/validate", middleware.RequireAuth, controllers.Validate)
+	r.POST("/logout", middleware.RequireAuth, controllers.Logout)
 	
 
 	//Posts

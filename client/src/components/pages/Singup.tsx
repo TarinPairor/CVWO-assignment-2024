@@ -17,7 +17,7 @@ const Signup: React.FC = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, pass_word: password }), // Change property name to pass_word
     });
 
     if (response.ok) {

@@ -62,6 +62,27 @@ func Signup(c *gin.Context) {
 	  })
 }
 
+func GetAllUsers(c *gin.Context) {
+	var users []models.User
+
+	// Fetch all users from the database
+	result := db.Find(&users)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to fetch users",
+		})
+		return
+	}
+
+	// Respond with the list of users in JSON format
+	c.JSON(http.StatusOK, gin.H{
+		"users": users,
+	})
+}
+
+
+
 func Login(c *gin.Context) {
 	//Get email/password off req body
 	var body struct {
@@ -81,7 +102,7 @@ func Login(c *gin.Context) {
 	db.First(&user, "email = ?", body.Email)
 	if user.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid email or password",
+			"error": "Invalid email or password on user.ID side",
 		})
 		return
 	}
@@ -90,7 +111,10 @@ func Login(c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.PassWord), []byte(body.Password))
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid email or password",
+			"error message": "Invalid email or password on password equality side",
+			"error": err,
+			"user_password": user.PassWord,
+			"body_password": body.Password,
 		})
 		return
 	}
@@ -111,12 +135,13 @@ func Login(c *gin.Context) {
 	}
 
 	//send back 
-	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie("Authorization", tokenString, 3600 * 24 * 30, "", "", false, true)
+	//c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600 * 24 * 30, "", "", true, true)
 
 	//Respond
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Logged in successfully",
+		"user": user,
 	  })
 }
 
@@ -128,5 +153,13 @@ func Validate(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"user": user,
+	})
+}
+
+func Logout(c *gin.Context) {
+	c.SetCookie("Authorization", "", int(time.Now().Add(-time.Hour).Unix()),"","", true, true )
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
 	})
 }

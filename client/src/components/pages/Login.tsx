@@ -17,9 +17,11 @@ const Login: React.FC = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
+      credentials: "include", //u forgot this thats whythere was no cookie in localhost
+      body: JSON.stringify({ email, pass_word: password }),
     });
-
+    const res = await response.json();
+    console.log(res);
     if (response.ok) {
       // Save the token or user data to the state or local storage
       // Redirect to the desired page (e.g., dashboard)

@@ -1,49 +1,45 @@
-// Home.tsx
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Logout from "../Logout";
 
 function Home() {
   const [user, setUser] = useState(null);
-
   useEffect(() => {
-    // Fetch user data after a successful login or when the component mounts
-    const fetchData = async () => {
+    const fetchUser = async () => {
       try {
         const response = await fetch("http://localhost:3000/validate", {
           method: "GET",
-          credentials: "include", // Include credentials to send the cookie
+          credentials: "include", // Include credentials to send cookies
         });
 
         if (response.ok) {
           const userData = await response.json();
+          console.log(userData);
           setUser(userData.user);
         } else {
-          console.error(
-            "Server returned an error:",
-            response.status,
-            response.statusText
-          );
+          // Handle error
+          console.error("Failed to fetch user data");
         }
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        // Handle error
+        console.error("Error fetching user data", error);
       }
     };
 
-    fetchData();
-  }, []); // The empty dependency array ensures that the effect runs only once when the component mounts
-
+    fetchUser();
+  }, []);
   return (
     <div>
       {user ? (
         <>
-          <p>Welcome, {user}</p>
-          {/* Add other relevant fields */}
+          <p>Welcome {user ? user.Email : "Guest"}</p>
+          <Logout />
         </>
       ) : (
-        <>
+        <div className="flex flex-row">
           <Link to="/signup">Sign Up</Link>
           <Link to="/login">Login</Link>
-        </>
+        </div>
       )}
     </div>
   );
