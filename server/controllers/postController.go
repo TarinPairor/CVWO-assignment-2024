@@ -14,7 +14,38 @@ func init() {
 	db = initializers.ConnectToDB()
 }
 
+func PostsCreate(c *gin.Context) {
+	var body struct {
+		Body  string
+		Title string
+		Email string
+	}
 
+	if err := c.Bind(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	// Query user to get the ID based on the provided email
+	var user models.User
+	if err := db.Where("email = ?", body.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
+		return
+	}
+
+	// Create a new post associated with the obtained user ID
+	post := models.Post{Title: body.Title, Body: body.Body, Email: user.Email}
+	result := db.Create(&post)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create post"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"post": post})
+}
+
+/*
 func PostsCreate(c *gin.Context) {
 
 	var body struct {
@@ -41,6 +72,8 @@ func PostsCreate(c *gin.Context) {
 	
   }
 
+  */
+
   func PostsIndex(c *gin.Context) {
 
 
@@ -57,6 +90,8 @@ func PostsCreate(c *gin.Context) {
 	})
 
   }
+
+  
 
   func PostsShow(c *gin.Context) {
 

@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logout from "../Logout";
+import Posts from "../Posts";
 
 function Home() {
   const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -16,6 +19,7 @@ function Home() {
           const userData = await response.json();
           console.log(userData);
           setUser(userData.user);
+          setEmail(userData.user.Email);
         } else {
           // Handle error
           console.error("Failed to fetch user data");
@@ -32,7 +36,8 @@ function Home() {
     <div>
       {user ? (
         <>
-          <p>Welcome {user ? user.Email : "Guest"}</p>
+          <Posts />
+          <p>Welcome {user ? email : "Guest"}</p>
           <Logout />
         </>
       ) : (

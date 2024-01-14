@@ -5,7 +5,7 @@ import Signup from "./components/pages/Singup";
 
 function App() {
   return (
-    <div className="w-full h-screen text-4xl text-blue-700 flex items-center justify-center">
+    <div className="">
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
