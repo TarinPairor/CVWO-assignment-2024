@@ -72,6 +72,8 @@ func PostsCreate(c *gin.Context) {
 	
   }
 
+  
+
   */
 
   func PostsIndex(c *gin.Context) {
@@ -112,6 +114,55 @@ func PostsCreate(c *gin.Context) {
 
   }
 
+  func PostsUpdate(c *gin.Context) {
+	// Get id from the URL
+	id := c.Param("id")
+
+	// Get data from the request body
+	var body struct {
+		Email string // Add Email to the request body
+		Body  string
+		Title string
+	}
+
+	if err := c.Bind(&body); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	// Find the post being updated
+	var post models.Post
+	if err := db.First(&post, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "Post not found",
+		})
+		return
+	}
+
+	// Check if the email in the request body matches the post's email
+	if body.Email != post.Email {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "Unauthorized to update this post",
+		})
+		return
+	}
+
+	// Update the post
+	db.Model(&post).Updates(models.Post{
+		Title: body.Title,
+		Body:  body.Body,
+	})
+
+	// Respond with the updated post
+	c.JSON(http.StatusOK, gin.H{
+		"post": post,
+	})
+}
+
+
+  /*
   func PostsUpdate(c * gin.Context) {
 
 	//Get id off url
@@ -140,6 +191,8 @@ func PostsCreate(c *gin.Context) {
 		"post": post,
 	})
   }
+
+  */
 
   func PostsDelete(c *gin.Context) {
 
