@@ -55,7 +55,9 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
           Body: newBody,
         }),
       });
-      console.log(response);
+      console.log(
+        `Updated post successfully to title:${newTitle} body:${newBody} by ${email}`
+      );
       if (response.ok) {
         // Call the onUpdate callback to refresh the posts list
         onUpdate();

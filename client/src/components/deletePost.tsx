@@ -10,7 +10,7 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
       const response = await fetch(`http://localhost:3000/posts/${postId}`, {
         method: "DELETE",
       });
-
+      console.log(`Delete post successfully of id:${postId}`);
       if (response.ok) {
         // Call the onDelete callback to refresh the posts list
         onDelete();

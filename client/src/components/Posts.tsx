@@ -31,8 +31,9 @@ function Posts() {
     fetchUser();
   }, []);
 
-  const handlePostCreated = (newPost: Post) => {
+  const handlePostCreated = async (newPost: Post) => {
     setPosts((prevPosts) => [...prevPosts, newPost]);
+    await refreshPosts();
   };
 
   const handleUpdateClick = (post: Post) => {
@@ -43,7 +44,6 @@ function Posts() {
     setSelectedPost(null);
   };
 
-  // Assuming you have a function to refresh posts after an update
   const refreshPosts = async () => {
     try {
       const response = await fetch("http://localhost:3000/posts");
@@ -63,17 +63,7 @@ function Posts() {
   };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch("http://localhost:3000/posts");
-        const data = await response.json();
-        setPosts(data.posts);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      }
-    };
-
-    fetchPosts();
+    refreshPosts();
   }, []);
 
   return (

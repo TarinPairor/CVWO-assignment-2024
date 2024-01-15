@@ -19,7 +19,6 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
 
         if (response.ok) {
           const userData = await response.json();
-          console.log(userData);
           setEmail(userData.user.Email);
         } else {
           // Handle error
@@ -43,6 +42,10 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
         },
         body: JSON.stringify({ Title: title, Body: body, Email: email }),
       });
+
+      console.log(
+        `Created post successfully with title:${title} body:${body} by ${email}`
+      );
       if (response.ok) {
         const newPost = await response.json();
 
@@ -51,7 +54,7 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
         setTitle("");
         setBody("");
         setEmail("");
-        window.location.reload();
+        // window.location.reload();
       } else {
         console.error("Failed to create post");
       }
