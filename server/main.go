@@ -68,7 +68,17 @@ func main() {
 	r.GET("/posts", controllers.PostsIndex)
 	r.GET("/posts/:id", controllers.PostsShow)
 	r.DELETE("/posts/:id", controllers.PostsDelete)
-	
+
+	//Comments
+	r.POST("/comments/:postid", controllers.CommentsCreate)
+	r.PUT("/comments/:id", controllers.CommentsUpdate)
+	r.GET("/comments", controllers.CommentsIndex)
+	r.GET("/comments/:id", controllers.CommentsShow)
+	r.DELETE("/comments/:id", controllers.CommentsDelete)
+	r.GET("/comments/post", controllers.CommentsUnderPost) // "/comments/post?postid=:postid"
+
+
+
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
   }
 
