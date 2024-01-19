@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 // DeletePost.tsx
 interface DeletePostProps {
   postId: number;
@@ -5,8 +7,11 @@ interface DeletePostProps {
 }
 
 function DeletePost({ postId, onDelete }: DeletePostProps) {
+  const [isDeleting, setIsDeleting] = useState(false);
+
   const handleDelete = async () => {
     try {
+      setIsDeleting(true);
       const response = await fetch(`http://localhost:3000/posts/${postId}`, {
         method: "DELETE",
       });
@@ -21,10 +26,16 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
     } catch (error) {
       // Handle error
       console.error("Error deleting post:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
-  return <button onClick={handleDelete}>Delete post</button>;
+  return (
+    <button onClick={handleDelete}>
+      {isDeleting ? "Deleting..." : "Delete Post"}
+    </button>
+  );
 }
 
 export default DeletePost;

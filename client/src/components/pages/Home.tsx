@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Logout from "../Logout";
-import Posts from "../Posts";
+import Posts from "../PostCRUD/Posts";
 
 function Home() {
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
 
+  // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
     const fetchUser = async () => {
       try {

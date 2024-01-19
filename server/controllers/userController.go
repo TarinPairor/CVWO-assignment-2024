@@ -15,7 +15,7 @@ import (
 var db *gorm.DB
 
 func init() {
-	db = initializers.ConnectToDB()
+	db = initializers.GetDB()
 }
 
 func Signup(c *gin.Context) {

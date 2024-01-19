@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	db = initializers.ConnectToDB()
+	db = initializers.GetDB()
 }
 
 func PostsCreate(c *gin.Context) {

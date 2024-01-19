@@ -11,7 +11,7 @@ import (
 )
 
 func init() {
-	db = initializers.ConnectToDB()
+	db = initializers.GetDB()
 }
 
 func CommentsCreate(c *gin.Context) {
@@ -26,6 +26,13 @@ func CommentsCreate(c *gin.Context) {
 
 	if err := c.Bind(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+		return
+	}
+
+	// Query user to get the ID based on the provided email
+	var user models.User
+	if err := db.Where("email = ?", body.Email).First(&user).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "User not found"})
 		return
 	}
 

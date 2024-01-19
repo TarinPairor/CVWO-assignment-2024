@@ -1,6 +1,6 @@
 // CreatePost.tsx
 import { useEffect, useState } from "react";
-import { Post } from "../interfaces/Post";
+import { Post } from "../../interfaces/Post";
 
 const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   onPostCreated,
@@ -9,6 +9,7 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   const [body, setBody] = useState("");
   const [email, setEmail] = useState("");
 
+  // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
     const fetchUser = async () => {
       try {

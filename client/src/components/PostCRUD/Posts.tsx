@@ -1,14 +1,17 @@
-import { useState, useEffect } from "react";
-import CreatePost from "./CreatePost";
-import { Post } from "../interfaces/Post";
+import { useState, useEffect, useMemo } from "react";
+import CreatePost from "./createPost";
+import { Post } from "../../interfaces/Post";
 import UpdatePost from "./updatePost";
 import DeletePost from "./deletePost";
+import LinkButton from "../Link";
 
 function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
+
   const [email, setEmail] = useState("");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
+  // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -31,19 +34,23 @@ function Posts() {
     fetchUser();
   }, []);
 
+  // HANDLE THE CREATION OF A NEW POST BY APPENDING IT TO THE PREVIOUS POST
   const handlePostCreated = async (newPost: Post) => {
     setPosts((prevPosts) => [...prevPosts, newPost]);
     await refreshPosts();
   };
 
+  //SET THE SELECTED POST TO THE POST WHERE THE UPDATE BUTTON WAS CLICKED AND DISPLAYS AN UPDATE FORM
   const handleUpdateClick = (post: Post) => {
     setSelectedPost(post);
   };
 
+  // CLOSE THE UPDATE FORM
   const handleUpdateClose = () => {
     setSelectedPost(null);
   };
 
+  // GENERATE THE POSTS
   const refreshPosts = async () => {
     try {
       const response = await fetch("http://localhost:3000/posts");
@@ -54,6 +61,7 @@ function Posts() {
     }
   };
 
+  //HANDLE THE UPDATING OF POST WHILE ALSO UPDATING THE DATA
   const handlePostUpdate = async () => {
     // Call refreshPosts after updating the post
     await refreshPosts();
@@ -66,13 +74,17 @@ function Posts() {
     refreshPosts();
   }, []);
 
+  const genurl = (postid: number) => `/post/${postid}`;
+  const memoizedPost = useMemo(() => posts, [posts]);
+
   return (
     <div>
       <h2>All Posts</h2>
       <CreatePost onPostCreated={handlePostCreated} />
       <ul>
-        {posts.map((post) => (
+        {memoizedPost.map((post) => (
           <li key={post.ID}>
+            <LinkButton url={genurl(post.ID)}></LinkButton>
             <div>
               <strong>ID:</strong>
               {post.ID}
