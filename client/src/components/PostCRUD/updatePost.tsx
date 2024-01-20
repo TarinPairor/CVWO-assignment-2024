@@ -1,4 +1,10 @@
 import { useEffect, useState } from "react";
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 
 interface UpdatePostProps {
   postId: number;
@@ -13,6 +19,7 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   body,
   onUpdate,
 }) => {
+  const [open, setOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
   const [newBody, setNewBody] = useState(body);
   const [email, setEmail] = useState("");
@@ -55,9 +62,13 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
           Body: newBody,
         }),
       });
+
+      setOpen(true);
+
       console.log(
         `Updated post successfully to title:${newTitle} body:${newBody} by ${email}`
       );
+
       if (response.ok) {
         // Call the onUpdate callback to refresh the posts list
         onUpdate();
@@ -74,29 +85,54 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
-      <h3>Update Post</h3>
-      <label>
-        New Title:
-        <input
-          type="text"
-          value={newTitle}
-          onChange={(e) => setNewTitle(e.target.value)}
-        />
-      </label>
-      <br />
-      <label>
-        New Body:
-        <textarea
-          value={newBody}
-          onChange={(e) => setNewBody(e.target.value)}
-        />
-      </label>
-      <br />
-      <button onClick={handleUpdate}>
-        <strong>Update Post</strong>
-      </button>
+      <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
+        Click Here to Updated
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Update Post"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText
+            id="alert-dialog-description"
+            className="flex-column"
+          >
+            <label>
+              <div className="font-bold">New Title:</div>
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+              />
+            </label>
+            <br />
+            <label>
+              <div className="font-bold">New Body:</div>
+              <textarea
+                value={newBody}
+                onChange={(e) => setNewBody(e.target.value)}
+              />
+            </label>
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleUpdate} color="primary" autoFocus>
+            Update Post
+          </Button>
+          <Button onClick={handleClose} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

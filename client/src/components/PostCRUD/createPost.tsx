@@ -65,32 +65,36 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   };
 
   return (
-    <div>
-      <h2>Create a New Post</h2>
-      <label>
-        Title:
+    <div className="max-w-md mx-auto mt-8 p-6 bg-gray-100 rounded-md shadow-md">
+      <h2 className="text-2xl font-semibold mb-4 text-gray-800">
+        Create a New Post
+      </h2>
+      <label className="block mb-4">
+        <span className="text-gray-700">Title:</span>
         <input
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
       </label>
-      <br />
-      <label>
-        Body:
-        <input
-          type="text"
+      <label className="block mb-4">
+        <span className="text-gray-700">Body:</span>
+        <textarea
           value={body}
           onChange={(e) => setBody(e.target.value)}
+          className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
       </label>
-      <br />
-      <label>
-        Email:
-        <p>{email}</p>
+      <label className="block mb-4">
+        <span className="text-gray-700">Email: {email}</span>
       </label>
-      <br />
-      <button onClick={handleCreatePost}>Create Post</button>
+      <button
+        onClick={handleCreatePost}
+        className="w-full bg-green-500 text-white p-2 rounded-md hover:bg-green-700 transition duration-300"
+      >
+        Create Post
+      </button>
     </div>
   );
 };

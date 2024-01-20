@@ -49,34 +49,34 @@ function CommentUnderPost() {
 
   const renderComments = () => {
     return memoizedComments.map((comment) => (
-      <div key={comment.ID}>
-        <br />
-        <p>ID: {comment.ID}</p>
+      <div key={comment.ID} className="my-4 p-4 border border-gray-300 rounded">
+        <p className="text-xl font-bold">ID: {comment.ID}</p>
         <p>Body: {comment.Body}</p>
         <p>By: {comment.Email}</p>
         <DeleteComment
           commentId={comment.ID}
           onDelete={refreshCommentsUnderPost}
         />
-        <br />
       </div>
     ));
   };
 
   return (
-    <div>
-      <h3>Post:</h3>
+    <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
+      <h3 className="text-3xl font-semibold mb-4">Post:</h3>
       {memoizedPost && (
-        <div>
-          <h2>Title: {memoizedPost.Title}</h2>
-          <p>Body: {memoizedPost.Body}</p>
+        <div className="mb-4">
+          <h2 className="text-4xl font-bold">{memoizedPost.Title}</h2>
+          <p className="text-lg">Body: {memoizedPost.Body}</p>
           <p>By: {memoizedPost.Email}</p>
         </div>
       )}
-      <h3>Comments:</h3>
+      <h3 className="text-3xl font-semibold mb-4">Comments:</h3>
       {renderComments()}
       <br />
-      <Link to={"/"}>Link</Link>
+      <Link to={"/"} className="text-blue-500 hover:underline">
+        Back to Posts
+      </Link>
       <CreateComment
         postid={postid || ""}
         onPostCreated={handleCommentsCreated}

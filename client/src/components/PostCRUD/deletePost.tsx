@@ -32,7 +32,10 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
   };
 
   return (
-    <button onClick={handleDelete}>
+    <button
+      onClick={handleDelete}
+      className="bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-700 transition duration-300 mt-1"
+    >
       {isDeleting ? "Deleting..." : "Delete Post"}
     </button>
   );

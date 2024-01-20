@@ -7,7 +7,9 @@ interface LinkProps {
 function LinkButton({ url }: LinkProps) {
   return (
     <div>
-      <Link to={url}>Link</Link>
+      <Link to={url} className="text-blue-500 hover:underline">
+        See Further
+      </Link>
     </div>
   );
 }
