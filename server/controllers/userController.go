@@ -157,7 +157,10 @@ func Validate(c *gin.Context) {
 }
 
 func Logout(c *gin.Context) {
-	c.SetCookie("Authorization", "", int(time.Now().Add(-time.Hour).Unix()),"","", true, true )
+
+	// EXPIRE COOKIE: c.SetCookie("Authorization", "", int(time.Now().Add(-time.Hour).Unix()),"","", true, true )
+	// Set MaxAge to -1 to delete the cookie
+	c.SetCookie("Authorization", "", -1, "", "", true, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "success",

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CommentUnderPost from "./components/CommentCRUD/CommentUnderPost";
+import MarkdownEditor from "./components/Markdown";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Singup";
@@ -13,6 +14,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/post/:postid" element={<CommentUnderPost />} />
+          <Route path="/markdown" element={<MarkdownEditor />} />
         </Routes>
       </Router>
     </div>

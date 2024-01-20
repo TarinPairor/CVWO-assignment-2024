@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
-import { User } from "../../interfaces/User";
+import { CookiesProvider, useCookies } from "react-cookie";
 import Logout from "../Logout";
 import Posts from "../PostCRUD/Posts";
 
 function Home() {
-  const [user, setUser] = useState<User | null>(null);
-  const cookies = useCookies(["Authorization"]);
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState("");
+  const [cookies] = useCookies();
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
@@ -22,6 +22,7 @@ function Home() {
           const userData = await response.json();
           console.log(userData);
           setUser(userData.user);
+          setEmail(userData.user.Email);
         } else {
           // Handle error
           console.error("Failed to fetch user data");
@@ -35,33 +36,37 @@ function Home() {
     fetchUser();
   }, []);
 
-  const isCookiePresent = !!cookies;
+  console.log("Cookies:", cookies);
+
+  //const isCookiePresent = !!cookies.Authorization;
 
   return (
-    <div>
-      {isCookiePresent ? (
-        <>
-          <Posts />
-          <p>Welcome {user ? user.Email : "Guest"}</p>
-          <Logout />
-        </>
-      ) : (
-        <div className="flex flex-row justify-center space-x-4">
-          <Link
-            to="/signup"
-            className="text-blue-500 hover:text-blue-700 transition duration-300"
-          >
-            Sign Up
-          </Link>
-          <Link
-            to="/login"
-            className="text-green-500 hover:text-green-700 transition duration-300"
-          >
-            Login
-          </Link>
-        </div>
-      )}
-    </div>
+    <CookiesProvider>
+      <div>
+        {user ? (
+          <>
+            <Posts />
+            <p>Welcome {user ? email : "Guest"}</p>
+            <Logout />
+          </>
+        ) : (
+          <div className="flex flex-row justify-center space-x-4">
+            <Link
+              to="/signup"
+              className="text-blue-500 hover:text-blue-700 transition duration-300"
+            >
+              Sign Up
+            </Link>
+            <Link
+              to="/login"
+              className="text-green-500 hover:text-green-700 transition duration-300"
+            >
+              Login
+            </Link>
+          </div>
+        )}
+      </div>
+    </CookiesProvider>
   );
 }
 
