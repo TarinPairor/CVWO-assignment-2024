@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 // DeletePost.tsx
 interface DeletePostProps {
   postId: number;
@@ -15,7 +17,7 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
       const response = await fetch(`http://localhost:3000/posts/${postId}`, {
         method: "DELETE",
       });
-      console.log(`Delete post successfully of id:${postId}`);
+      console.log(`Deleted post successfully of id:${postId}`);
       if (response.ok) {
         // Call the onDelete callback to refresh the posts list
         onDelete();
@@ -31,12 +33,16 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
     }
   };
 
-  return (
+  return isDeleting ? (
+    <div className="transition duration-300 m-2">
+      <CircularProgress />
+    </div>
+  ) : (
     <button
       onClick={handleDelete}
       className="bg-red-500 text-white px-5 py-2 rounded-md hover:bg-red-700 transition duration-300 mt-1"
     >
-      {isDeleting ? "Deleting..." : "Delete Post"}
+      Delete Post
     </button>
   );
 }

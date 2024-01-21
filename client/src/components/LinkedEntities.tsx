@@ -26,14 +26,17 @@ const LinkedEntities: React.FC = () => {
   };
 
   const getHighlightedText = (text: string) => {
-    const highlightedEntities = entities.map((entity) => entity.name);
+    let modifiedText = text;
 
-    return highlightedEntities.reduce((acc, entity) => {
-      const entityUrl = entities.find((e) => e.name === entity)?.url || "#";
+    entities.forEach((entity: Entity) => {
+      const { offset, length } = entity.matches[0];
+      const entityUrl = entity.url || "#";
+      const matchedText = text.substring(offset, offset + length);
+      const highlightedText = `<a href="${entityUrl}" target="_blank" rel="noopener noreferrer" style="color: #1a4c84; text-decoration: none; transition: color 0.3s ease-in-out; border-bottom: 1px solid #1a4c84;" onmouseover="this.style.color='#38a169'; this.style.borderBottom='#38a169'" onmouseout="this.style.color='#1a4c84'; this.style.borderBottom='#1a4c84'"><u>${matchedText}</u></a>`;
+      modifiedText = modifiedText.replace(matchedText, highlightedText);
+    });
 
-      const highlightedText = `<a href="${entityUrl}" target="_blank" rel="noopener noreferrer" style="color: #1a4c84; text-decoration: none; transition: color 0.3s ease-in-out; border-bottom: 1px solid #1a4c84;" onmouseover="this.style.color='#38a169'; this.style.borderBottom='#38a169'" onmouseout="this.style.color='#1a4c84'; this.style.borderBottom='#1a4c84'"><u>${entity}</u></a>`;
-      return acc.split(entity).join(highlightedText);
-    }, text);
+    return modifiedText;
   };
 
   return (
@@ -53,22 +56,6 @@ const LinkedEntities: React.FC = () => {
         <div
           dangerouslySetInnerHTML={{ __html: getHighlightedText(document) }}
         />
-        {/*entities.map((entity: Entity, index) => (
-          <div key={index}>
-            <p>
-              <b>- Entity</b>{" "}
-              <a
-                href={entity.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: "underline" }}
-              >
-                {entity.name}
-              </a>
-              ; datasource: {entity.dataSource}
-            </p>
-          </div>
-        ))*/}
       </div>
     </div>
   );

@@ -6,6 +6,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 interface UpdatePostProps {
   postId: number;
   title: string;
@@ -23,6 +25,8 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   const [newTitle, setNewTitle] = useState(title);
   const [newBody, setNewBody] = useState(body);
   const [email, setEmail] = useState("");
+
+  const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -51,6 +55,7 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
 
   const handleUpdate = async () => {
     try {
+      setIsUpdating(true);
       const response = await fetch(`http://localhost:3000/posts/${postId}`, {
         method: "PUT",
         headers: {
@@ -82,6 +87,8 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
     } catch (error) {
       // Handle error
       console.error("Error updating post:", error);
+    } finally {
+      setIsUpdating(true);
     }
   };
 
@@ -94,6 +101,7 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
       <Button variant="outlined" color="primary" onClick={() => setOpen(true)}>
         Click Here to Updated
       </Button>
+
       <Dialog
         open={open}
         onClose={handleClose}
@@ -101,35 +109,38 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">{"Update Post"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText
-            id="alert-dialog-description"
-            className="flex-column"
-          >
-            <label>
-              <div className="font-bold">New Title:</div>
-              <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-              />
-            </label>
-            <br />
-            <label>
-              <div className="font-bold">New Body:</div>
-              <textarea
-                value={newBody}
-                onChange={(e) => setNewBody(e.target.value)}
-              />
-            </label>
-          </DialogContentText>
-        </DialogContent>
+        {isUpdating ? (
+          <div className="flex justify-center items-center h-full">
+            <CircularProgress />
+          </div>
+        ) : (
+          <DialogContent>
+            <DialogContentText
+              id="alert-dialog-description"
+              className="flex-column"
+            >
+              <label>
+                <div className="font-bold">New Title:</div>
+                <input
+                  type="text"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                />
+              </label>
+              <br />
+              <label>
+                <div className="font-bold">New Body:</div>
+                <textarea
+                  value={newBody}
+                  onChange={(e) => setNewBody(e.target.value)}
+                />
+              </label>
+            </DialogContentText>
+          </DialogContent>
+        )}
         <DialogActions>
           <Button onClick={handleUpdate} color="primary" autoFocus>
             Update Post
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Close
           </Button>
         </DialogActions>
       </Dialog>

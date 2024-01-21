@@ -3,16 +3,17 @@ import { Link } from "react-router-dom";
 import { CookiesProvider, useCookies } from "react-cookie";
 import Logout from "../Logout";
 import Posts from "../PostCRUD/Posts";
+import { User } from "../../interfaces/User";
 
 function Home() {
-  const [user, setUser] = useState(null);
-  const [email, setEmail] = useState("");
-  const [cookies] = useCookies();
+  const [user, setUser] = useState<User | null>(null);
+  const [cookies, setCookie] = useCookies(["Authorization"]);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setCookie("Authorization", user, { path: "/" });
         const response = await fetch("http://localhost:3000/validate", {
           method: "GET",
           credentials: "include", // Include credentials to send cookies
@@ -22,7 +23,6 @@ function Home() {
           const userData = await response.json();
           console.log(userData);
           setUser(userData.user);
-          setEmail(userData.user.Email);
         } else {
           // Handle error
           console.error("Failed to fetch user data");
@@ -36,8 +36,6 @@ function Home() {
     fetchUser();
   }, []);
 
-  console.log("Cookies:", cookies);
-
   //const isCookiePresent = !!cookies.Authorization;
 
   return (
@@ -46,7 +44,7 @@ function Home() {
         {user ? (
           <>
             <Posts />
-            <p>Welcome {user ? email : "Guest"}</p>
+            <p>Welcome {user ? user.Email : "Guest"}</p>
             <Logout />
           </>
         ) : (

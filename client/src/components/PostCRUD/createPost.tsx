@@ -1,6 +1,7 @@
 // CreatePost.tsx
 import { useEffect, useState } from "react";
 import { Post } from "../../interfaces/Post";
+import { CircularProgress } from "@mui/material";
 
 const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   onPostCreated,
@@ -8,6 +9,7 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [email, setEmail] = useState("");
+  const [load, setLoad] = useState(false);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
@@ -36,6 +38,7 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
 
   const handleCreatePost = async () => {
     try {
+      setLoad(true);
       const response = await fetch("http://localhost:3000/posts", {
         method: "POST",
         headers: {
@@ -61,10 +64,28 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
       }
     } catch (error) {
       console.error("Error creating post:", error);
+    } finally {
+      setLoad(false);
     }
   };
 
-  return (
+  return !email ? (
+    <div
+      className="bg-red-100 border border-red-400 text-red-700 px-4 py-4 rounded relative mb-2 align-middle"
+      role="alert"
+    >
+      <strong className="font-bold text-xl">Sorry! 😔</strong>
+      <br />
+      <span className="block sm:inline">
+        {" "}
+        Exclusive posting privileges are reserved for registered members. Kindly
+        log out and re-enter the platform with valid user credentials to access
+        this feature.
+      </span>
+    </div>
+  ) : load ? (
+    <CircularProgress />
+  ) : (
     <div className="max-w-md mx-auto mt-8 p-6 bg-gray-100 rounded-md shadow-md">
       <h2 className="text-2xl font-semibold mb-4 text-gray-800">
         Create a New Post
@@ -85,9 +106,6 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
           onChange={(e) => setBody(e.target.value)}
           className="w-full mt-2 p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-      </label>
-      <label className="block mb-4">
-        <span className="text-gray-700">Email: {email}</span>
       </label>
       <button
         onClick={handleCreatePost}

@@ -5,6 +5,7 @@ import MarkdownEditor from "./components/Markdown";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Singup";
+import SentimentAnalysisComponent from "./components/SentimentAnalysis";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path="/post/:postid" element={<CommentUnderPost />} />
           <Route path="/markdown" element={<MarkdownEditor />} />
           <Route path="/linkedentities" element={<LinkedEntities />} />
+          <Route path="/sentiment" element={<SentimentAnalysisComponent />} />
         </Routes>
       </Router>
     </div>

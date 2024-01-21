@@ -3,8 +3,10 @@ import CreatePost from "./createPost";
 import { Post } from "../../interfaces/Post";
 import UpdatePost from "./updatePost";
 import DeletePost from "./deletePost";
+import { formatTimeStamp, timeAgo } from "../formatTimeStamp";
 
 import CircularProgress from "@mui/material/CircularProgress";
+import { LinearProgress } from "@mui/material";
 
 function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -12,6 +14,8 @@ function Posts() {
   const [email, setEmail] = useState("");
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [load, setLoad] = useState(false);
+
+  const [isLoadingPost, setIsLoadingPost] = useState(false);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
@@ -57,7 +61,9 @@ function Posts() {
   // GENERATE THE POSTS
   const refreshPosts = async () => {
     try {
+      setIsLoadingPost(true);
       const response = await fetch("http://localhost:3000/posts");
+      setIsLoadingPost(false);
       const data = await response.json();
       setPosts(data.posts);
     } catch (error) {
@@ -89,63 +95,77 @@ function Posts() {
       ) : (
         <CreatePost onPostCreated={handlePostCreated} />
       )}
-      <ul className="space-y-6">
-        {memoizedPost.map((post) => (
-          <li key={post.ID} className="border-b pb-4">
-            {selectedPost && selectedPost.ID === post.ID && (
-              <div>
-                <UpdatePost
-                  postId={selectedPost.ID}
-                  title={selectedPost.Title}
-                  body={selectedPost.Body}
-                  onUpdate={handlePostUpdate}
-                />
-                <button onClick={handleUpdateClose}>Close</button>
-              </div>
-            )}
-            <div className=" cursor-pointer  transform transition-transform duration-300 hover:scale-105">
-              <a href={genurl(post.ID)}>
+
+      {isLoadingPost ? (
+        <div className="mt-10">
+          <LinearProgress color="inherit" />
+        </div>
+      ) : (
+        <ul className="space-y-6">
+          {memoizedPost.map((post) => (
+            <li key={post.ID} className="border-b pb-4">
+              {selectedPost && selectedPost.ID === post.ID && (
                 <div>
-                  <strong>ID:</strong>
-                  {post.ID}
+                  <UpdatePost
+                    postId={selectedPost.ID}
+                    title={selectedPost.Title}
+                    body={selectedPost.Body}
+                    onUpdate={handlePostUpdate}
+                  />
+                  <button
+                    onClick={handleUpdateClose}
+                    className="bg-white text-red-500 border border-red-500 px-4 py-1 mt-1 rounded-md font-light hover:bg-red-700 hover:text-white transition duration-300"
+                  >
+                    Close
+                  </button>
                 </div>
-                <div>
-                  <strong>Title:</strong> {post.Title}
-                </div>
-                <div>
-                  <strong>Body:</strong> {post.Body}
-                </div>
-                <div>
-                  <strong>Email:</strong> {post.Email}
-                </div>
-                <div>
-                  <strong>Created At:</strong> {post.CreatedAt}
-                </div>
-                <div>
-                  <strong>Updated At:</strong> {post.UpdatedAt}
-                </div>
-              </a>
-            </div>
-            {/* Only display the update button if the post is created by the logged-in user */}
-            <div>
-              {post.Email === email && (
-                <button
-                  onClick={() => handleUpdateClick(post)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+              )}
+              <div className="pb-3 *:cursor-pointer transform transition-transform duration-300 hover:scale-105">
+                <a
+                  href={genurl(post.ID)}
+                  className="block text-black hover:text-gray-700 transition duration-300"
                 >
-                  Update Post
-                </button>
-              )}
-            </div>
-            <div>
-              {post.Email === email && (
-                <DeletePost postId={post.ID} onDelete={refreshPosts} />
-              )}
-            </div>
-            <br />
-          </li>
-        ))}
-      </ul>
+                  <div className="mb-2 flex flex-row items-center justify-between">
+                    <h2 className="text-xl font-bold">{post.Title}</h2>
+                    <div className="text-xs text-gray-600">
+                      <span>Last Updated:</span>
+                      <br />
+                      {timeAgo(post.UpdatedAt)}
+                    </div>
+                  </div>
+
+                  <div className="text-gray-700 ">{post.Body}</div>
+                  <div className="mt-2 text-gray-600">
+                    <strong>Posted by</strong> {post.Email}
+                  </div>
+                  <div className="text-gray-600">
+                    <strong>Created At:</strong>{" "}
+                    {formatTimeStamp(post.CreatedAt)}
+                  </div>
+                </a>
+              </div>
+
+              {/* Only display the update button if the post is created by the logged-in user */}
+              <div>
+                {post.Email === email && (
+                  <button
+                    onClick={() => handleUpdateClick(post)}
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                  >
+                    Update Post
+                  </button>
+                )}
+              </div>
+              <div>
+                {post.Email === email && (
+                  <DeletePost postId={post.ID} onDelete={refreshPosts} />
+                )}
+              </div>
+              <br />
+            </li>
+          ))}
+        </ul>
+      )}
       {/* Display the UpdatePost component when a post is selected for update */}
     </div>
   );

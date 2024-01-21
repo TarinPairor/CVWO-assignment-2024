@@ -1,4 +1,5 @@
 // DeleteComment.tsx
+import { CircularProgress } from "@mui/material";
 import { useState } from "react";
 
 interface DeleteCommentProps {
@@ -39,9 +40,21 @@ const DeleteComment: React.FC<DeleteCommentProps> = ({
     }
   };
 
-  return (
-    <button onClick={handleDelete} disabled={isDeleting}>
-      {isDeleting ? "Deleting..." : "Delete Comment"}
+  return isDeleting ? (
+    <div className="flex items-center justify-center">
+      <CircularProgress />
+    </div>
+  ) : (
+    <button
+      onClick={handleDelete}
+      disabled={isDeleting}
+      className={`bg-red-500 text-white px-4 py-2 rounded-md ${
+        isDeleting
+          ? "opacity-50 cursor-not-allowed"
+          : "hover:bg-red-700 transition duration-300"
+      }`}
+    >
+      Delete Comment
     </button>
   );
 };

@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Comment } from "../../interfaces/Comment";
 
@@ -9,6 +10,7 @@ interface CreateCommentProps {
 function CreateComment({ postid, onPostCreated }: CreateCommentProps) {
   const [body, setBody] = useState("");
   const [email, setEmail] = useState("");
+  const [load, setLoad] = useState(false);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
@@ -37,6 +39,7 @@ function CreateComment({ postid, onPostCreated }: CreateCommentProps) {
 
   const handleCreateComment = async () => {
     try {
+      setLoad(true);
       const response = await fetch(`http://localhost:3000/comments/${postid}`, {
         method: "POST",
         headers: {
@@ -57,22 +60,52 @@ function CreateComment({ postid, onPostCreated }: CreateCommentProps) {
       }
     } catch (error) {
       console.error("Error creating comment:", error);
+    } finally {
+      setLoad(false);
     }
   };
 
-  return (
-    <div>
-      <h3>Create Comment:</h3>
-      <div>
-        <label htmlFor="body">Body:</label>
-        <input
-          type="text"
-          id="body"
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
+  return email ? (
+    load ? (
+      <CircularProgress />
+    ) : (
+      <div className="bg-white p-4 rounded-md shadow-md">
+        <h3 className="text-lg font-semibold mb-2">Create Comment:</h3>
+        <div className="mb-4">
+          <label
+            htmlFor="body"
+            className="block text-sm font-medium text-gray-600"
+          >
+            Comment Body:
+          </label>
+          <textarea
+            id="body"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            className="w-full border border-gray-300 rounded-md p-2 text-sm"
+          />
+        </div>
+        <button
+          onClick={handleCreateComment}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition duration-300"
+        >
+          Post Comment
+        </button>
       </div>
-      <button onClick={handleCreateComment}>Create Comment</button>
+    )
+  ) : (
+    <div
+      className="bg-red-100 border border-red-400 text-red-700 px-4 py-4 rounded relative mb-2 align-middle"
+      role="alert"
+    >
+      <strong className="font-bold text-xl">Sorry! 😔</strong>
+      <br />
+      <span className="block sm:inline">
+        {" "}
+        Exclusive commenting privileges are reserved for registered members.
+        Kindly log out and re-enter the platform with valid user credentials to
+        access this feature.
+      </span>
     </div>
   );
 }

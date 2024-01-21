@@ -1,9 +1,5 @@
 // LogoutButton.tsx
-import { useCookies } from "react-cookie";
-
 const Logout: React.FC = () => {
-  const [, , removeCookie] = useCookies(["Authorization"]);
-
   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:3000/logout", {
@@ -14,8 +10,6 @@ const Logout: React.FC = () => {
       if (response.ok) {
         // Logout was successful
         console.log("Logout successful");
-        // Remove all cookies
-        removeCookie("Authorization");
         // You may choose to redirect or update the UI as needed
         window.location.reload();
       } else {
