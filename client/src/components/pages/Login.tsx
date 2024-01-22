@@ -12,14 +12,17 @@ const Login: React.FC = () => {
     // You may use fetch or axios to communicate with your backend API
     // Update the URL and request method accordingly
 
-    const response = await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include", //u forgot this thats whythere was no cookie in localhost
-      body: JSON.stringify({ email, pass_word: password }),
-    });
+    const response = await fetch(
+      "https://go-render-backend.onrender.com/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", //u forgot this thats whythere was no cookie in localhost
+        body: JSON.stringify({ email, pass_word: password }),
+      }
+    );
     const res = await response.json();
     console.log(res);
     if (response.ok) {

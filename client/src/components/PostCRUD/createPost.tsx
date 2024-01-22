@@ -15,10 +15,13 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -39,13 +42,16 @@ const CreatePost: React.FC<{ onPostCreated: (newPost: Post) => void }> = ({
   const handleCreatePost = async () => {
     try {
       setLoad(true);
-      const response = await fetch("http://localhost:3000/posts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ Title: title, Body: body, Email: email }),
-      });
+      const response = await fetch(
+        "https://go-render-backend.onrender.com/posts",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Title: title, Body: body, Email: email }),
+        }
+      );
 
       console.log(
         `Created post successfully with title:${title} body:${body} by ${email}`

@@ -12,13 +12,16 @@ const Signup: React.FC = () => {
     // You may use fetch or axios to communicate with your backend API
     // Update the URL and request method accordingly
 
-    const response = await fetch("http://localhost:3000/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, pass_word: password }), // Change property name to pass_word
-    });
+    const response = await fetch(
+      "https://go-render-backend.onrender.com/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, pass_word: password }), // Change property name to pass_word
+      }
+    );
 
     if (response.ok) {
       // Save the token or user data to the state or local storage

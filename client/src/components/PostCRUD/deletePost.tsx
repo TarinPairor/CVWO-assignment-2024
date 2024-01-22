@@ -14,9 +14,12 @@ function DeletePost({ postId, onDelete }: DeletePostProps) {
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://go-render-backend.onrender.com/posts/${postId}`,
+        {
+          method: "DELETE",
+        }
+      );
       console.log(`Deleted post successfully of id:${postId}`);
       if (response.ok) {
         // Call the onDelete callback to refresh the posts list

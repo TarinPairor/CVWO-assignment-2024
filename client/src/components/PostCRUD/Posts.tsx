@@ -21,10 +21,13 @@ function Posts() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -62,7 +65,9 @@ function Posts() {
   const refreshPosts = async () => {
     try {
       setIsLoadingPost(true);
-      const response = await fetch("http://localhost:3000/posts");
+      const response = await fetch(
+        "https://go-render-backend.onrender.com/posts"
+      );
       setIsLoadingPost(false);
       const data = await response.json();
       setPosts(data.posts);

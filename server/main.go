@@ -34,7 +34,7 @@ func main() {
 	//config := cors.DefaultConfig()
 	//config.AllowOrigins = []string{"http://localhost:5173"}  
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"}, // Allow any origin
+		AllowOrigins:     []string{"https://taylord4u-forum.web.app"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		AllowCredentials: true,

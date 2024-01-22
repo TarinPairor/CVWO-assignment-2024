@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CommentUnderPost from "./components/CommentCRUD/CommentUnderPost";
 import LinkedEntities from "./components/LinkedEntities";
 import MarkdownEditor from "./components/Markdown";
+import HealthCheck from "./components/pages/HealthCheck";
 import Home from "./components/pages/Home";
 import Login from "./components/pages/Login";
 import Signup from "./components/pages/Singup";
@@ -19,6 +20,7 @@ function App() {
           <Route path="/markdown" element={<MarkdownEditor />} />
           <Route path="/linkedentities" element={<LinkedEntities />} />
           <Route path="/sentiment" element={<SentimentAnalysisComponent />} />
+          <Route path="/health" element={<HealthCheck />} />
         </Routes>
       </Router>
     </div>

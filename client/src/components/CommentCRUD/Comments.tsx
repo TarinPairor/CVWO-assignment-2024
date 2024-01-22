@@ -9,7 +9,7 @@ export default function Comments() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
+        const response = await fetch("https://go-render-backend.onrender.com/validate", {
           method: "GET",
           credentials: "include", // Include credentials to send cookies
         });
@@ -30,7 +30,7 @@ export default function Comments() {
 
   const refreshComments = async () => {
     try {
-      const response = await fetch("http://localhost:3000/comments");
+      const response = await fetch("https://go-render-backend.onrender.com/comments");
       const data = await response.json();
       setComments(data.comments);
     } catch (error) {

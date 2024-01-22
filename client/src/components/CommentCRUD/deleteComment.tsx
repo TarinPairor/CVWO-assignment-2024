@@ -18,7 +18,7 @@ const DeleteComment: React.FC<DeleteCommentProps> = ({
       setIsDeleting(true);
       // Make the DELETE request to delete the comment by commentId
       const response = await fetch(
-        `http://localhost:3000/comments/${commentId}`,
+        `https://go-render-backend.onrender.com/comments/${commentId}`,
         {
           method: "DELETE",
         }

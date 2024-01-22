@@ -17,10 +17,13 @@ function CommentUnderPost() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -39,7 +42,7 @@ function CommentUnderPost() {
   const refreshCommentsUnderPost = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/comments/post?postid=${postid}`
+        `https://go-render-backend.onrender.com/comments/post?postid=${postid}`
       );
       const data = await response.json();
       setComments(data.comments);
@@ -55,7 +58,9 @@ function CommentUnderPost() {
 
   const refreshPost = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/posts/${postid}`);
+      const response = await fetch(
+        `https://go-render-backend.onrender.com/posts/${postid}`
+      );
       const data = await response.json();
       setPost(data.post);
     } catch (error) {

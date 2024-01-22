@@ -16,10 +16,13 @@ function CreateComment({ postid, onPostCreated }: CreateCommentProps) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -40,13 +43,16 @@ function CreateComment({ postid, onPostCreated }: CreateCommentProps) {
   const handleCreateComment = async () => {
     try {
       setLoad(true);
-      const response = await fetch(`http://localhost:3000/comments/${postid}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ body, email, postid }),
-      });
+      const response = await fetch(
+        `https://go-render-backend.onrender.com/comments/${postid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ body, email, postid }),
+        }
+      );
 
       if (response.ok) {
         const newComment = await response.json();

@@ -31,10 +31,13 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -56,17 +59,20 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   const handleUpdate = async () => {
     try {
       setIsUpdating(true);
-      const response = await fetch(`http://localhost:3000/posts/${postId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          Email: email, // Pass the email from props
-          Title: newTitle,
-          Body: newBody,
-        }),
-      });
+      const response = await fetch(
+        `https://go-render-backend.onrender.com/posts/${postId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Email: email, // Pass the email from props
+            Title: newTitle,
+            Body: newBody,
+          }),
+        }
+      );
 
       setOpen(true);
 

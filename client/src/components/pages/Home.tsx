@@ -14,10 +14,13 @@ function Home() {
     const fetchUser = async () => {
       try {
         setCookie("Authorization", user, { path: "/" });
-        const response = await fetch("http://localhost:3000/validate", {
-          method: "GET",
-          credentials: "include", // Include credentials to send cookies
-        });
+        const response = await fetch(
+          "https://go-render-backend.onrender.com/validate",
+          {
+            method: "GET",
+            credentials: "include", // Include credentials to send cookies
+          }
+        );
 
         if (response.ok) {
           const userData = await response.json();
@@ -41,10 +44,10 @@ function Home() {
   return (
     <CookiesProvider>
       <div>
-        {user ? (
+        {!user ? (
           <>
             <Posts />
-            <p>Welcome {user ? user.Email : "Guest"}</p>
+            <p>Welcome {user ? "user.Email" : "Guest"}</p>
             <Logout />
           </>
         ) : (
