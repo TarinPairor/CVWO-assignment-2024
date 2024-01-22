@@ -54,6 +54,8 @@ func main() {
 	//r.POST("/simplelogin", controllers.SimpleLogin)
 	//r.GET("/simplevalidate", middleware.RequireSimpleAuth, controllers.SimpleValidate)
 
+	r.GET("/health", controllers.HealthCheckHandler)
+
 	//Users
 	r.POST("/signup", controllers.Signup)
 	r.GET("/getallusers", controllers.GetAllUsers)

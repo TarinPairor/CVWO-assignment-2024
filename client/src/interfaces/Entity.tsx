@@ -13,8 +13,3 @@ export interface Match {
   confidenceScore: number;
 }
 
-export interface Result {
-  entities: Entity[];
-  id: string;
-  error?: string; // Making the error property optional
-}

@@ -18,6 +18,12 @@ func init() {
 	db = initializers.GetDB()
 }
 
+func HealthCheckHandler(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"status": "ok",
+	})
+}
+
 func Signup(c *gin.Context) {
 	//Get email/password off req body
 	var body struct {

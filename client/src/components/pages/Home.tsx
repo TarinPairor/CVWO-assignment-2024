@@ -7,7 +7,7 @@ import { User } from "../../interfaces/User";
 
 function Home() {
   const [user, setUser] = useState<User | null>(null);
-  const [cookies, setCookie] = useCookies(["Authorization"]);
+  const [, setCookie] = useCookies(["Authorization"]);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {

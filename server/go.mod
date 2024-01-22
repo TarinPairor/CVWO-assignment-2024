@@ -1,6 +1,6 @@
 module github.com/TarinPairor/CVWO-assignment-2024
 
-go 1.21.5
+go 1.21.4 //downgrading from 1.21.5 solved version problem in render
 
 require (
 	github.com/bytedance/sonic v1.10.2 // indirect

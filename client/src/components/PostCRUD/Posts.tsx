@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
-import CreatePost from "./createPost";
+import CreatePost from "./CreatePost";
 import { Post } from "../../interfaces/Post";
-import UpdatePost from "./updatePost";
-import DeletePost from "./deletePost";
+import UpdatePost from "./UpdatePost";
+import DeletePost from "./DeletePost";
 import { formatTimeStamp, timeAgo } from "../formatTimeStamp";
 
 import CircularProgress from "@mui/material/CircularProgress";
