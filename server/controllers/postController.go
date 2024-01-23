@@ -19,6 +19,7 @@ func PostsCreate(c *gin.Context) {
 		Body  string
 		Title string
 		Email string
+		Tag string
 	}
 
 	if err := c.Bind(&body); err != nil {
@@ -34,7 +35,7 @@ func PostsCreate(c *gin.Context) {
 	}
 
 	// Create a new post associated with the obtained user ID
-	post := models.Post{Title: body.Title, Body: body.Body, Email: user.Email}
+	post := models.Post{Title: body.Title, Body: body.Body, Email: user.Email, Tag: body.Tag}
 	result := db.Create(&post)
 
 	if result.Error != nil {
@@ -123,6 +124,7 @@ func PostsCreate(c *gin.Context) {
 		Email string // Add Email to the request body
 		Body  string
 		Title string
+		Tag string
 	}
 
 	if err := c.Bind(&body); err != nil {
@@ -153,6 +155,7 @@ func PostsCreate(c *gin.Context) {
 	db.Model(&post).Updates(models.Post{
 		Title: body.Title,
 		Body:  body.Body,
+		Tag: body.Tag,
 	})
 
 	// Respond with the updated post
@@ -206,3 +209,31 @@ func PostsCreate(c *gin.Context) {
 	c.Status(200)
 
   }
+
+  func PostsUnderTag(c *gin.Context) {
+    // retrieve tag from context.Param of type tag
+    tag := c.Param("tag")
+
+    var posts []models.Post
+	
+    result := db.Where("tag = ?", tag).Find(&posts)
+
+    if result.Error != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to fetch posts"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"posts": posts})
+}
+
+func AllTags(c *gin.Context) {
+    var tags []*string
+	result := db.Model(&models.Post{}).Distinct().Where("tag IS NOT NULL").Pluck("tag", &tags)
+
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "can not get tags"})
+		return
+	}
+
+    c.JSON(http.StatusOK, gin.H{"tags": tags})
+}

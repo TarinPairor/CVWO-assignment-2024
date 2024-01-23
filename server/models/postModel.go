@@ -7,4 +7,5 @@ type Post struct {
 	Email  string
 	Title  string
 	Body   string
+	Tag string
 }
