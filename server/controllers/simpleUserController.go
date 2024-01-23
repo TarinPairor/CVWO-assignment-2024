@@ -12,7 +12,7 @@ import (
 
 
 func init() {
-	db = initializers.ConnectToDB()
+	db = initializers.GetDB()
 }
 
 func SimpleSignup(c *gin.Context) {
@@ -68,10 +68,44 @@ func SimpleLogin(c *gin.Context) {
 	c.SetSameSite(http.SameSiteLaxMode)
 	c.SetCookie("Authorization", tokenString, 3600*24*30, "", "", false, true)
 
-	c.JSON(http.StatusOK, gin.H{"message": "Logged in successfully"})
+	c.JSON(http.StatusOK, gin.H{"user": user})
 }
 
 func SimpleValidate(c *gin.Context) {
-	user, _ := c.Get("user")
-	c.JSON(http.StatusOK, gin.H{"user": user})
+	user, exists := c.Get("user")
+	
+	if exists {
+		c.JSON(http.StatusBadRequest, gin.H{"error": exists})
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
+}
+
+func SimpleLogout(c *gin.Context) {
+	c.SetCookie("Authorization", "", -1, "", "", true, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "success",
+	})
+}
+
+func GetAllSimpleUsers(c *gin.Context) {
+	var simpleUsers []models.SimpleUser
+
+	// Fetch all simpleUsers from the database
+	result := db.Find(&simpleUsers)
+
+	if result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Failed to fetch simpleUsers",
+		})
+		return
+	}
+
+	// Respond with the list of simpleUsers in JSON format
+	c.JSON(http.StatusOK, gin.H{
+		"users": simpleUsers,
+	})
 }

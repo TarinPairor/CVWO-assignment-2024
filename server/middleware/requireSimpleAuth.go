@@ -9,27 +9,24 @@ import (
 	"github.com/TarinPairor/CVWO-assignment-2024/models"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
+	"gorm.io/gorm"
 )
 
+var db *gorm.DB
 
 func init() {
-	db = initializers.GetDB()
+	db = initializers.ConnectToDB()
 }
 
-
-func RequireAuth(c *gin.Context) {
-	//Get cookie
+func RequireSimpleAuth(c *gin.Context) {
+	// Get cookie
 	tokenString, err := c.Cookie("Authorization")
 	if err != nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
 
-	//Decode/Validate
-
-	// Parse takes the token string and a function for looking up the key. The latter is especially
-	// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
-	// head of the token to identify which key to use, but the parsed token (head and claims) is provided
-	// to the callback, providing flexibility.
+	// Decode/Validate
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Don't forget to validate the alg is what you expect:
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -40,31 +37,38 @@ func RequireAuth(c *gin.Context) {
 		return []byte("abc"), nil
 	})
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-
-	//Check expiration
-	if float64(time.Now().Unix()) > claims["exp"].(float64) {
+	if err != nil || !token.Valid {
 		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
 
-	//Find user with toekn sub
-	var user models.User
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	// Check expiration
+	expiration, ok := claims["exp"].(float64)
+	if !ok || float64(time.Now().Unix()) > expiration {
+		c.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
+	// Find user with token sub
+	var user models.SimpleUser
 	db.First(&user, claims["sub"])
 
 	if user.ID == 0 {
 		c.AbortWithStatus(http.StatusUnauthorized)
+		return
 	}
 
-	//Attach with req
+	// Attach with req
 	c.Set("user", user)
 
-	//Continue to next
+	// Continue to next
 	c.Next()
-	
+
 	fmt.Println(claims["foo"], claims["nbf"])
-	} else {
-		fmt.Println(err)
-	}
-
-
 }

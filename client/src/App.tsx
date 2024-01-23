@@ -4,7 +4,10 @@ import LinkedEntities from "./components/LinkedEntities";
 import MarkdownEditor from "./components/Markdown";
 import HealthCheck from "./components/pages/HealthCheck";
 import Home from "./components/pages/Home";
+import Info from "./components/pages/Info";
 import Login from "./components/pages/Login";
+import SimpleHome from "./components/pages/SimpleHome";
+import SimpleLogin from "./components/pages/SimpleLogin";
 import Signup from "./components/pages/Singup";
 import SentimentAnalysisComponent from "./components/SentimentAnalysis";
 
@@ -21,6 +24,9 @@ function App() {
           <Route path="/linkedentities" element={<LinkedEntities />} />
           <Route path="/sentiment" element={<SentimentAnalysisComponent />} />
           <Route path="/health" element={<HealthCheck />} />
+          <Route path="/simple/login" element={<SimpleLogin />} />
+          <Route path="/simple/home" element={<SimpleHome />} />
+          <Route path="/info" element={<Info />} />
         </Routes>
       </Router>
     </div>
