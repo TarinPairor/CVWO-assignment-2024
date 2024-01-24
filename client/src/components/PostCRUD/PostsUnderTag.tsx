@@ -96,7 +96,7 @@ function PostsUnderTag() {
 
   return (
     <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
-      <h2 className="text-3xl font-semibold mb-6">All PostsUnderTag</h2>
+      <h2 className="text-3xl font-semibold mb-6">{tag}</h2>
       {load ? (
         <CircularProgress />
       ) : (
