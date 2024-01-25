@@ -1,13 +1,33 @@
 # CVWO-assignment-2024
 
-Welcome to forum page. Upon entering, you will encounter a simple interface featuring Sign Up and Login buttons. For new users, the registration process involves providing your name and password. Following a successful signup, a seamless redirection brings you back to the main page.
+## Forum Platform Documentation
 
-Proceed to the Login section, employing the credentials you have just created. Ideally, you will be met with an extensive list of posts, each adorned with a title, body, and tag—meticulously categorizing the topic under discussion. Engage with these posts using CRUD operations, affording you full control over the content you directly contribute.
+Welcome to the Forum Platform
+Upon entering the Forum Platform, users are greeted with an interface featuring prominent "Sign Up" and "Login" buttons. For new users, the registration process involves providing a valid name and creating a secure password which is hashed preserving the user's data. Upon successful signup, users are seamlessly redirected back to the main page.
 
-In the event of a login anomaly, our system gracefully accommodates you as a guest user. While in this state, exploration remains unhindered, although the creation of new posts is unavailable.
+## User Authentication
 
-Delve deeper into the discourse by exploring clickable links leading to comments beneath each post. This feature enables you to contribute your thoughts through comments and even remove them when deemed necessary.
+Navigate to the "Login" section, utilizing the credentials created during the signup process. Upon successful authentication, users gain access to a list of posts. Each post is presented with a title, body, and tag, effectively categorizing the topic under discussion.
 
-Use the search bar located above to the left. Leverage this tool to refine your focus by selecting specific tags of interest. By doing so, you gain access to a collection of posts falling under the chosen tag.
+## Content Interaction
+
+Engage with posts (sorted by the last time they were updated) through comprehensive CRUD (Create, Read, Update, Delete) operations, providing users with complete control over the content they contribute. Users are not allowed to edit other people's posts. To create a post, you can input the title, body and tag data into the form at the top of the page. To delete a post, click on the delete button underneath a post. To update a post, click the update button and then it will display another dialog update button where you will be displayed dialog to update the title or body of the post.
+If you were to click on one of the links to a post, it would send you to a section where you can interact with post by sending comments. You can create comments and delete comments that you created.
+
+### Sentiment Analysis
+
+Microsoft Azure's sentiment analysis AI tool has been proven to be useful for displaying sentiment data relating to the positivity of the post. This data can be accessed by clicking the Sentiment Analysis button.
+
+## Guest User Experience
+
+In the event of a login anomaly, the system accommodates users as guest users. While in this state, exploration remains available. However, the creation of new posts is restricted, preserving the platform's integrity.
+
+## Discourse Exploration
+
+You can exploring clickable links leading to comments beneath each post. This feature empowers users to contribute their thoughts through comments and provides the flexibility to remove them when deemed necessary.
+
+## Search Functionality
+
+Utilize the search bar located above to the left. This tool allows users to refine their focus by selecting specific tags of interest. By doing so, users gain access to a curated collection of posts falling under the chosen tag. Posts can remain tagless so that they can only be viewed from the home page.
 
 The shared hosting url is [https://taylord4u-render-forum.onrender.com/](https://taylord4u-render-forum.onrender.com/)
