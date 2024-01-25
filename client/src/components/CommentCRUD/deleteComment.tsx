@@ -1,6 +1,7 @@
 // DeleteComment.tsx
 import { CircularProgress } from "@mui/material";
 import { useState } from "react";
+import { ENDPOINT } from "../Variables";
 
 interface DeleteCommentProps {
   commentId: number;
@@ -17,18 +18,16 @@ const DeleteComment: React.FC<DeleteCommentProps> = ({
     try {
       setIsDeleting(true);
       // Make the DELETE request to delete the comment by commentId
-      const response = await fetch(
-        `https://go-render-backend.onrender.com/comments/${commentId}`,
-        {
-          method: "DELETE",
-        }
-      );
+      const response = await fetch(`${ENDPOINT}/comments/${commentId}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
-        // Handle successful deletion (e.g., refresh comments under post)
-        // You might want to call a callback function or use state to trigger a refresh
-        onDelete();
+        // Handle successful deletion
         console.log("Comment deleted successfully");
+        // Trigger the onDelete function
+        onDelete();
+        //window.location.reload();
       } else {
         // Handle deletion error
         console.error("Failed to delete comment");

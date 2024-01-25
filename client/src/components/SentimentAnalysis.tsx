@@ -1,111 +1,119 @@
-export default function SentimentAnalysis() {
-  return <div>SentimentAnalysis</div>;
+// SentimentAnalysisComponent.tsx
+
+import React, { useState, useEffect } from "react";
+import { AzureKeyCredential } from "@azure/ai-text-analytics";
+import {
+  TextAnalysisClient,
+  SentimentAnalysisResult,
+  SentenceSentiment,
+} from "@azure/ai-language-text";
+
+interface SentimentAnalysisProps {
+  text: string;
+  showResults: boolean;
 }
 
-// import { useState } from "react";
-// import { AzureKeyCredential } from "@azure/ai-text-analytics";
-// import { TextAnalysisClient } from "@azure/ai-language-text";
-// import { Result, Sentence } from "../interfaces/SentimentResult";
+const SentimentAnalysisComponent: React.FC<SentimentAnalysisProps> = ({
+  text,
+  showResults,
+}) => {
+  const [results, setResults] = useState<SentimentAnalysisResult[] | null>([]);
+  const [showSentences, setShowSentences] = useState(false);
 
-// const SentimentAnalysisComponent = () => {
-//   const [results, setResults] = useState<Result | null>([]);
-//   const [document, setDocument] = useState("");
+  useEffect(() => {
+    const analyzeSentiment = async () => {
+      const endpoint = "https://awesomeapp.cognitiveservices.azure.com/";
+      const key = "6a1bd94f29464e5a9a1420ae820aeb23";
 
-//   const analyzeSentiment = async () => {
-//     const endpoint = "https://awesomeapp.cognitiveservices.azure.com/";
-//     const key = "6a1bd94f29464e5a9a1420ae820aeb23";
+      const client = new TextAnalysisClient(
+        endpoint,
+        new AzureKeyCredential(key)
+      );
 
-//     const client = new TextAnalysisClient(
-//       endpoint,
-//       new AzureKeyCredential(key)
-//     );
+      const documents = [
+        {
+          text,
+          id: "0",
+          language: "en",
+        },
+      ];
 
-//     const documents = [
-//       {
-//         text: document, // Use the entered text from the state
-//         id: "0",
-//         language: "en",
-//       },
-//     ];
+      try {
+        const analysisResults = await client.analyze(
+          "SentimentAnalysis",
+          documents,
+          {
+            includeOpinionMining: false,
+          }
+        );
+        setResults(analysisResults);
+      } catch (error) {
+        console.error("Error analyzing sentiment:", error);
+      }
+    };
 
-//     try {
-//       const analysisResults = await client.analyze(
-//         "SentimentAnalysis",
-//         documents,
-//         {
-//           includeOpinionMining: true,
-//         }
-//       );
-//       setResults(analysisResults);
-//     } catch (error) {
-//       console.error("Error analyzing sentiment:", error);
-//     }
-//   };
+    if (showResults) {
+      analyzeSentiment();
+    }
+  }, [text, showResults]);
 
-//   return (
-//     <div>
-//       <h1>Sentiment Analysis Results</h1>
-//       <label>
-//         Enter Text:
-//         <textarea
-//           value={document}
-//           onChange={(e) => setDocument(e.target.value)}
-//         />
-//       </label>
-//       <button onClick={analyzeSentiment}>Analyze Sentiment</button>
+  console.log(results);
 
-//       {results?.map((result: Result, index: number) => (
-//         <div key={index}>
-//           <p>Document {result.id}</p>
-//           {!result.error ? (
-//             <>
-//               <p>Document text: {result.sentences[0].text}</p>
-//               <p>Overall Sentiment: {result.sentiment}</p>
-//               <p>
-//                 Sentiment confidence scores:{" "}
-//                 {JSON.stringify(result.confidenceScores)}
-//               </p>
-//               <p>Sentences:</p>
-//               {result.sentences.map(
-//                 (sentence: Sentence, sentenceIndex: number) => (
-//                   <div key={sentenceIndex}>
-//                     <p>Sentence sentiment: {sentence.sentiment}</p>
-//                     <p>Sentence text: {sentence.text}</p>
-//                     <p>
-//                       Confidence scores:{" "}
-//                       {JSON.stringify(sentence.confidenceScores)}
-//                     </p>
-//                     <p>Mined opinions:</p>
-//                     {sentence.opinions.map((opinion, opinionIndex) => (
-//                       <div key={opinionIndex}>
-//                         <p>Target text: {opinion.target.text}</p>
-//                         <p>Target sentiment: {opinion.target.sentiment}</p>
-//                         <p>
-//                           Target confidence scores:{" "}
-//                           {JSON.stringify(opinion.target.confidenceScores)}
-//                         </p>
-//                         <p>Target assessments:</p>
-//                         {opinion.assessments.map(
-//                           (assessment, assessmentIndex) => (
-//                             <div key={assessmentIndex}>
-//                               <p>Text: {assessment.text}</p>
-//                               <p>Sentiment: {assessment.sentiment}</p>
-//                             </div>
-//                           )
-//                         )}
-//                       </div>
-//                     ))}
-//                   </div>
-//                 )
-//               )}
-//             </>
-//           ) : (
-//             <p>Error: {result.error}</p>
-//           )}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
+  return (
+    <div className="max-w-2xl mx-auto p-4 bg-white rounded-md shadow-md my-8">
+      {results?.map((result: SentimentAnalysisResult, index: number) => (
+        <div key={index} className="my-4 p-4 border border-gray-300 rounded">
+          {!result.error && (
+            <>
+              <h4 className="font-semibold text-blue-600">
+                Post sentiment scores:
+              </h4>
+              <p className="text-sm">
+                <br />
+                <span className="text-green-500">Positive:</span>{" "}
+                {result.confidenceScores.positive} <br />
+                <span className="text-gray-500">Neutral:</span>{" "}
+                {result.confidenceScores.neutral} <br />
+                <span className="text-red-500">Negative:</span>{" "}
+                {result.confidenceScores.negative} <br />
+              </p>
 
-// export default SentimentAnalysisComponent;
+              <button
+                onClick={() => setShowSentences(!showSentences)}
+                className="text-sm px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 mt-2"
+              >
+                Display Details
+              </button>
+
+              {showSentences &&
+                result.sentences.map(
+                  (sentence: SentenceSentiment, sentenceIndex: number) => (
+                    <div key={sentenceIndex} className="mt-4">
+                      <p className="text-sm font-semibold text-blue-500">
+                        Sentence {sentenceIndex + 1} - Sentiment is{" "}
+                        {sentence.sentiment.toLocaleUpperCase()}
+                      </p>
+                      <p className="text-sm mb-2 text-gray-700">
+                        Sentence text: {sentence.text}
+                      </p>
+                      <p className="text-sm">
+                        Confidence scores: <br />
+                        <span className="text-green-500">Positive:</span>{" "}
+                        {sentence.confidenceScores.positive} <br />
+                        <span className="text-gray-500">Neutral:</span>{" "}
+                        {sentence.confidenceScores.neutral} <br />
+                        <span className="text-red-500">Negative:</span>{" "}
+                        {sentence.confidenceScores.negative} <br />
+                      </p>
+                    </div>
+                  )
+                )}
+            </>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default SentimentAnalysisComponent;

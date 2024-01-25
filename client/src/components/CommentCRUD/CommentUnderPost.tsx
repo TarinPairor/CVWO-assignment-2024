@@ -6,24 +6,25 @@ import { Post } from "../../interfaces/Post";
 import { formatTimeStamp, timeAgo } from "../formatTimeStamp";
 import CreateComment from "./CreateComment";
 import DeleteComment from "./DeleteComment";
+import { ENDPOINT } from "../Variables";
+import { Button, CircularProgress } from "@mui/material";
+import SentimentAnalysisComponent from "../SentimentAnalysis";
 
 function CommentUnderPost() {
   const { postid } = useParams<{ postid: string }>();
   const [comments, setComments] = useState<Comment[]>([]);
   const [post, setPost] = useState<Post | null>(null);
   const [email, setEmail] = useState("");
+  const [showSentimentAnalysis, setShowSentimentAnalysis] = useState(false);
 
   // LOAD THE EMAIL OF THE LOGGED IN USER
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          "https://go-render-backend.onrender.com/validate",
-          {
-            method: "GET",
-            credentials: "include", // Include credentials to send cookies
-          }
-        );
+        const response = await fetch(`${ENDPOINT}/validate`, {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies
+        });
 
         if (response.ok) {
           const userData = await response.json();
@@ -42,7 +43,7 @@ function CommentUnderPost() {
   const refreshCommentsUnderPost = async () => {
     try {
       const response = await fetch(
-        `https://go-render-backend.onrender.com/comments/post?postid=${postid}`
+        `${ENDPOINT}/comments/post?postid=${postid}`
       );
       const data = await response.json();
       setComments(data.comments);
@@ -58,9 +59,7 @@ function CommentUnderPost() {
 
   const refreshPost = async () => {
     try {
-      const response = await fetch(
-        `https://go-render-backend.onrender.com/posts/${postid}`
-      );
+      const response = await fetch(`${ENDPOINT}/posts/${postid}`);
       const data = await response.json();
       setPost(data.post);
     } catch (error) {
@@ -120,6 +119,31 @@ function CommentUnderPost() {
           <div className="text-gray-600 m-2">
             on {formatTimeStamp(memoizedPost.CreatedAt)}
           </div>
+          <Button
+            onClick={() => setShowSentimentAnalysis(true)}
+            variant="contained"
+          >
+            Analyze Sentiment
+          </Button>
+          <br />
+
+          {/* Conditionally render SentimentAnalysisComponent based on state */}
+          {showSentimentAnalysis && (
+            <>
+              <Button
+                onClick={() => setShowSentimentAnalysis(false)}
+                variant="outlined"
+                color="error"
+                style={{ position: "relative", margin: "1rem" }} // Increase the margin as needed
+              >
+                Close
+              </Button>
+              <SentimentAnalysisComponent
+                text={memoizedPost.Body}
+                showResults={showSentimentAnalysis}
+              />
+            </>
+          )}
         </div>
       )}
       {email ? (
@@ -128,7 +152,9 @@ function CommentUnderPost() {
           onPostCreated={handleCommentsCreated}
         />
       ) : (
-        <div></div>
+        <div>
+          <CircularProgress />
+        </div>
       )}
       {memoizedComments.length ? (
         <div>

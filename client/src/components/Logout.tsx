@@ -1,14 +1,13 @@
+import { ENDPOINT } from "./Variables";
+
 // LogoutButton.tsx
 const Logout: React.FC = () => {
   const handleLogout = async () => {
     try {
-      const response = await fetch(
-        "https://go-render-backend.onrender.com/logout",
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
+      const response = await fetch(`${ENDPOINT}/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
 
       if (response.ok) {
         // Logout was successful
@@ -24,7 +23,14 @@ const Logout: React.FC = () => {
     }
   };
 
-  return <button onClick={handleLogout}>Logout</button>;
+  return (
+    <button
+      onClick={handleLogout}
+      className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-5"
+    >
+      Logout
+    </button>
+  );
 };
 
 export default Logout;

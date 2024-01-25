@@ -1,6 +1,7 @@
 // Signup.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINT } from "../Variables";
 
 const Signup: React.FC = () => {
   const navigate = useNavigate();
@@ -12,16 +13,13 @@ const Signup: React.FC = () => {
     // You may use fetch or axios to communicate with your backend API
     // Update the URL and request method accordingly
 
-    const response = await fetch(
-      "https://go-render-backend.onrender.com/signup",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, pass_word: password }), // Change property name to pass_word
-      }
-    );
+    const response = await fetch(`${ENDPOINT}/signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, pass_word: password }), // Change property name to pass_word
+    });
 
     if (response.ok) {
       // Save the token or user data to the state or local storage
@@ -38,7 +36,7 @@ const Signup: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Signup</h2>
       <input
         type="text"
-        placeholder="Email"
+        placeholder="Name"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded-md"

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Comment } from "../../interfaces/Comment";
+import { ENDPOINT } from "../Variables";
 
 export default function Comments() {
   const [, setEmail] = useState("");
@@ -9,7 +10,7 @@ export default function Comments() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch("https://go-render-backend.onrender.com/validate", {
+        const response = await fetch(`${ENDPOINT}/validate`, {
           method: "GET",
           credentials: "include", // Include credentials to send cookies
         });
@@ -30,7 +31,7 @@ export default function Comments() {
 
   const refreshComments = async () => {
     try {
-      const response = await fetch("https://go-render-backend.onrender.com/comments");
+      const response = await fetch(`${ENDPOINT}/comments`);
       const data = await response.json();
       setComments(data.comments);
     } catch (error) {

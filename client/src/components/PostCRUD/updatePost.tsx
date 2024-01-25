@@ -7,6 +7,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
 import CircularProgress from "@mui/material/CircularProgress";
+import { ENDPOINT } from "../Variables";
 
 interface UpdatePostProps {
   postId: number;
@@ -31,17 +32,13 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          "https://go-render-backend.onrender.com/validate",
-          {
-            method: "GET",
-            credentials: "include", // Include credentials to send cookies
-          }
-        );
+        const response = await fetch(`${ENDPOINT}/validate`, {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies
+        });
 
         if (response.ok) {
           const userData = await response.json();
-          console.log(userData);
           setEmail(userData.user.Email);
         } else {
           // Handle error
@@ -59,20 +56,17 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
   const handleUpdate = async () => {
     try {
       setIsUpdating(true);
-      const response = await fetch(
-        `https://go-render-backend.onrender.com/posts/${postId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            Email: email, // Pass the email from props
-            Title: newTitle,
-            Body: newBody,
-          }),
-        }
-      );
+      const response = await fetch(`${ENDPOINT}/posts/${postId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          Email: email, // Pass the email from props
+          Title: newTitle,
+          Body: newBody,
+        }),
+      });
 
       setOpen(true);
 
@@ -88,7 +82,7 @@ const UpdatePost: React.FC<UpdatePostProps> = ({
         setNewBody("");
       } else {
         // Handle error
-        console.error("Failed to update post");
+        console.error(response);
       }
     } catch (error) {
       // Handle error

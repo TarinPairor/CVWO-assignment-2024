@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { ENDPOINT } from "../Variables";
 
 const HealthCheck: React.FC = () => {
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
     // Fetch health check status from the backend
-    fetch("https://go-render-backend.onrender.com/health") // Replace with your backend URL
+    fetch(`${ENDPOINT}/health`)
       .then((response) => response.json())
       .then((data) => setStatus(data.status))
       .catch((error) => console.error("Error fetching health check:", error));

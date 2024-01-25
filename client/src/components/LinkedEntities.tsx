@@ -1,11 +1,8 @@
-export default function LinkedEntities() {
-  return <div>LinkedEntities</div>;
-}
-
 // import React, { useState } from "react";
 // import {
 //   TextAnalysisClient,
 //   AzureKeyCredential,
+//   EntityLinkingResult
 // } from "@azure/ai-language-text";
 // import { Entity } from "../interfaces/Entity";
 
@@ -24,7 +21,7 @@ export default function LinkedEntities() {
 //     const analysisResults = await client.analyze("EntityLinking", [document]);
 
 //     // Check if matches and entities exist in the first result before accessing them
-//     const firstResultEntities = analysisResults[0]?.entities || [];
+//     const firstResultEntities = analysisResults[0].entities || [];
 //     // Update setEntities to handle the correct type
 //     setEntities(firstResultEntities);
 //   };
@@ -33,7 +30,8 @@ export default function LinkedEntities() {
 //     let modifiedText = text;
 
 //     entities.forEach((entity: Entity) => {
-//       const { offset, length } = entity.matches[0];
+//       const matches = entity.matches;
+//       const { offset, length } = matches[0];
 //       const entityUrl = entity.url || "#";
 //       const matchedText = text.substring(offset, offset + length);
 //       const highlightedText = `<a href="${entityUrl}" target="_blank" rel="noopener noreferrer" style="color: #1a4c84; text-decoration: none; transition: color 0.3s ease-in-out; border-bottom: 1px solid #1a4c84;" onmouseover="this.style.color='#38a169'; this.style.borderBottom='#38a169'" onmouseout="this.style.color='#1a4c84'; this.style.borderBottom='#1a4c84'"><u>${matchedText}</u></a>`;
@@ -66,3 +64,9 @@ export default function LinkedEntities() {
 // };
 
 // export default LinkedEntities;
+
+function LinkedEntities() {
+  return <div>LinkedEntities</div>;
+}
+
+export default LinkedEntities;

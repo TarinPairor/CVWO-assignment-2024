@@ -8,6 +8,7 @@ import { formatTimeStamp, timeAgo } from "../formatTimeStamp";
 import CircularProgress from "@mui/material/CircularProgress";
 import { LinearProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
+import { ENDPOINT } from "../Variables";
 
 function PostsUnderTag() {
   const { tag } = useParams<{ tag: string }>();
@@ -23,13 +24,10 @@ function PostsUnderTag() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          "https://go-render-backend.onrender.com/validate",
-          {
-            method: "GET",
-            credentials: "include", // Include credentials to send cookies
-          }
-        );
+        const response = await fetch(`${ENDPOINT}/validate`, {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies
+        });
 
         if (response.ok) {
           const userData = await response.json();
@@ -67,9 +65,7 @@ function PostsUnderTag() {
   const refreshPosts = async () => {
     try {
       setIsLoadingPost(true);
-      const response = await fetch(
-        `https://go-render-backend.onrender.com/posts/tags/${tag}`
-      );
+      const response = await fetch(`${ENDPOINT}/posts/tags/${tag}`);
       setIsLoadingPost(false);
       const data = await response.json();
       setPosts(data.posts);

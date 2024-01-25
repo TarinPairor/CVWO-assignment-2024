@@ -1,6 +1,7 @@
 // Login.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ENDPOINT } from "../Variables";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -12,17 +13,14 @@ const Login: React.FC = () => {
     // You may use fetch or axios to communicate with your backend API
     // Update the URL and request method accordingly
 
-    const response = await fetch(
-      "https://go-render-backend.onrender.com/login",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", //u forgot this thats whythere was no cookie in localhost
-        body: JSON.stringify({ email, pass_word: password }),
-      }
-    );
+    const response = await fetch(`${ENDPOINT}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include", //u forgot this thats whythere was no cookie in localhost
+      body: JSON.stringify({ email, pass_word: password }),
+    });
     const res = await response.json();
     console.log(res);
     if (response.ok) {
@@ -40,7 +38,7 @@ const Login: React.FC = () => {
       <h2 className="text-2xl font-semibold mb-4">Login</h2>
       <input
         type="text"
-        placeholder="Email"
+        placeholder="Name"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="w-full p-2 mb-4 border border-gray-300 rounded-md"

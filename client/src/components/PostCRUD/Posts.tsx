@@ -7,6 +7,7 @@ import { formatTimeStamp, timeAgo } from "../formatTimeStamp";
 
 import CircularProgress from "@mui/material/CircularProgress";
 import { LinearProgress } from "@mui/material";
+import { ENDPOINT } from "../Variables";
 
 function Posts() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -21,13 +22,10 @@ function Posts() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await fetch(
-          "https://go-render-backend.onrender.com/validate",
-          {
-            method: "GET",
-            credentials: "include", // Include credentials to send cookies
-          }
-        );
+        const response = await fetch(`${ENDPOINT}/validate`, {
+          method: "GET",
+          credentials: "include", // Include credentials to send cookies
+        });
 
         if (response.ok) {
           const userData = await response.json();
@@ -65,12 +63,18 @@ function Posts() {
   const refreshPosts = async () => {
     try {
       setIsLoadingPost(true);
-      const response = await fetch(
-        "https://go-render-backend.onrender.com/posts"
-      );
-      setIsLoadingPost(false);
+      const response = await fetch(`${ENDPOINT}/posts`);
       const data = await response.json();
-      setPosts(data.posts);
+
+      // Sort the posts by UpdatedAt timestamp in descending order
+      const sortedPosts = data.posts.sort((a: Post, b: Post) => {
+        return (
+          new Date(b.UpdatedAt).getTime() - new Date(a.UpdatedAt).getTime()
+        );
+      });
+
+      setIsLoadingPost(false);
+      setPosts(sortedPosts);
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
@@ -96,7 +100,9 @@ function Posts() {
     <div className="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-md shadow-md">
       <h2 className="text-3xl font-semibold mb-6">All Posts</h2>
       {load ? (
-        <CircularProgress />
+        <div className="m-4">
+          <CircularProgress />
+        </div>
       ) : (
         <CreatePost onPostCreated={handlePostCreated} />
       )}
@@ -108,7 +114,7 @@ function Posts() {
       ) : (
         <ul className="space-y-6">
           {memoizedPost.map((post) => (
-            <li key={post.ID} className="border-b pb-4">
+            <li key={post.ID} className="border-b pb-4 m-2">
               {selectedPost && selectedPost.ID === post.ID && (
                 <div>
                   <UpdatePost
@@ -119,9 +125,9 @@ function Posts() {
                   />
                   <button
                     onClick={handleUpdateClose}
-                    className="bg-white text-red-500 border border-red-500 px-4 py-1 mt-1 rounded-md font-light hover:bg-red-700 hover:text-white transition duration-300"
+                    className="bg-white text-red-500 border border-red-500 px-4 py-1 mt-2 rounded-md font-light hover:bg-red-700 hover:text-white transition duration-300"
                   >
-                    Close
+                    X
                   </button>
                 </div>
               )}
