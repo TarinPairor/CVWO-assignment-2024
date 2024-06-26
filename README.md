@@ -2,7 +2,7 @@
 
 ## Forum Platform Documentation
 
-Welcome to Taylord4u
+Welcome to Taylord4u.
 Upon entering the Forum Platform, users are greeted with an interface featuring prominent "Sign Up" and "Login" buttons. For new users, the registration process involves providing a valid name and creating a secure password which is hashed preserving the user's data. Upon successful signup, users are seamlessly redirected back to the main page.
 
 ## User Authentication
