@@ -15,6 +15,7 @@
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.5",
+    "caniuse-lite": "^1.0.30001638",
     "chart.js": "^4.4.1",
     "react": "^18.2.0",
     "react-cookie": "^7.0.1",
@@ -22,7 +23,9 @@
     "react-markdown": "^9.0.1",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.21.2",
-    "swr": "^2.2.4"
+    "react-type-animation": "^3.2.0",
+    "swr": "^2.2.4",
+    "typewriter-effect": "^2.21.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
